@@ -8,6 +8,8 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.PersistentCacheSettings
 import com.shopfinance.app.data.auth.AuthRepository
 import com.shopfinance.app.data.auth.FirebaseAuthRepository
+import com.shopfinance.app.data.debts.DebtRepository
+import com.shopfinance.app.data.debts.FirestoreDebtRepository
 import com.shopfinance.app.data.ledger.FirestoreLedgerRepository
 import com.shopfinance.app.data.ledger.LedgerRepository
 import com.shopfinance.app.data.shop.FirestoreShopRepository
@@ -18,8 +20,8 @@ import com.shopfinance.app.data.shop.ShopRepository
  * (manual dependency injection, no framework).
  *
  * Firebase is only initialised when the build had app/google-services.json. Check
- * [firebaseConfigured] first: without it, reading [authRepository], [shopRepository] or
- * [ledgerRepository] throws [IllegalStateException].
+ * [firebaseConfigured] first: without it, reading [authRepository], [shopRepository],
+ * [ledgerRepository] or [debtRepository] throws [IllegalStateException].
  */
 class AppContainer(context: Context) {
 
@@ -54,6 +56,10 @@ class AppContainer(context: Context) {
 
     val ledgerRepository: LedgerRepository by lazy {
         FirestoreLedgerRepository(firestore)
+    }
+
+    val debtRepository: DebtRepository by lazy {
+        FirestoreDebtRepository(firestore)
     }
 
     private fun requireFirebase() {
