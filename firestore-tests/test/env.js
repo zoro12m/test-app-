@@ -133,3 +133,76 @@ export function storedEntryData(uid, overrides = {}) {
         ...overrides,
     };
 }
+
+/** The debtor and debt most debt tests use. */
+export const DEBTOR_ID = 'debtor-1';
+export const DEBT_ID = 'debt-1';
+
+/** Every field a new debtor must have; phone is optional. */
+export const DEBTOR_KEYS = ['name', 'note', 'createdBy', 'createdAt', 'schemaVersion'];
+
+/** A new debtor exactly as the app writes it, with optional overrides. */
+export function newDebtorData(uid, overrides = {}) {
+    return {
+        name: 'رامي حداد',
+        phone: '+961 3 123 456',
+        note: '',
+        createdBy: uid,
+        createdAt: serverTimestamp(),
+        schemaVersion: 1,
+        ...overrides,
+    };
+}
+
+/** Every field of a new debt. */
+export const DEBT_KEYS = ['debtorId', 'amountMinor', 'currency', 'debtDate', 'note', 'createdBy', 'createdAt', 'schemaVersion'];
+
+/** A new debt exactly as the app writes it (100.00 USD taken on 2026-10-01), with optional overrides. */
+export function newDebtData(uid, overrides = {}) {
+    return {
+        debtorId: DEBTOR_ID,
+        amountMinor: 10000,
+        currency: 'USD',
+        debtDate: '2026-10-01',
+        note: '',
+        createdBy: uid,
+        createdAt: serverTimestamp(),
+        schemaVersion: 1,
+        ...overrides,
+    };
+}
+
+/** Every field of a new payment. */
+export const PAYMENT_KEYS = ['debtId', 'amountMinor', 'paymentDate', 'note', 'createdBy', 'createdAt', 'schemaVersion'];
+
+/** A new payment exactly as the app writes it (30.00 USD on 2026-10-05), with optional overrides. */
+export function newPaymentData(uid, overrides = {}) {
+    return {
+        debtId: DEBT_ID,
+        amountMinor: 3000,
+        paymentDate: '2026-10-05',
+        note: '',
+        createdBy: uid,
+        createdAt: serverTimestamp(),
+        schemaVersion: 1,
+        ...overrides,
+    };
+}
+
+/** [data] as the server keeps it after create, with createdAt resolved. */
+export function stored(data) {
+    return { ...data, createdAt: Timestamp.fromDate(new Date('2026-10-01T10:00:05Z')) };
+}
+
+/** Seeds DEBTOR_ID and, unless [debt] is null, DEBT_ID (100.00 USD on 2026-10-01) in [shopId]. */
+export async function seedDebt(shopId = ALICE_SHOP, debt = {}) {
+    await seed(`shops/${shopId}/debtors/${DEBTOR_ID}`, stored(newDebtorData(ALICE)));
+    if (debt != null) {
+        await seed(`shops/${shopId}/debts/${DEBT_ID}`, stored(newDebtData(ALICE, debt)));
+    }
+}
+
+/** A calendar day [days] from today in UTC, written as the app writes days ("2026-10-01"). */
+export function dayFromToday(days) {
+    return new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+}

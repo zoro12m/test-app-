@@ -243,18 +243,22 @@ private fun CategoryPicker(
     }
 }
 
-/** The chosen day, with quick choices for today and yesterday and a calendar for older days. */
+/**
+ * The chosen day, with quick choices for today and yesterday and a calendar for older days.
+ * Also used by the debt and payment forms, with their own [label].
+ */
 @Composable
-private fun DateChooser(
+internal fun DateChooser(
     date: LocalDate,
     today: LocalDate,
     onDateChange: (LocalDate) -> Unit,
     onPickOther: () -> Unit,
+    label: String = stringResource(R.string.entry_date_label),
 ) {
     val formatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM) }
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(
-            text = stringResource(R.string.entry_date_label),
+            text = label,
             style = MaterialTheme.typography.labelLarge,
         )
         val dayName = when (date) {
@@ -282,28 +286,31 @@ private fun DateChooser(
 }
 
 /**
- * A calendar limited to 2000..today. The picker works in UTC midnights, so dates are
- * converted at UTC to keep the same calendar day.
+ * A calendar limited to [earliest]..today (2000..today unless given). The picker works in UTC
+ * midnights, so dates are converted at UTC to keep the same calendar day.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun EntryDatePicker(
+internal fun EntryDatePicker(
     initial: LocalDate,
     today: LocalDate,
     onPick: (LocalDate) -> Unit,
     onDismiss: () -> Unit,
+    earliest: LocalDate = LocalDate.of(EARLIEST_YEAR, 1, 1),
 ) {
     val todayMillis = today.toUtcMillis()
-    val selectableDates = remember(today) {
+    val earliestMillis = earliest.toUtcMillis()
+    val selectableDates = remember(today, earliest) {
         object : SelectableDates {
-            override fun isSelectableDate(utcTimeMillis: Long): Boolean = utcTimeMillis <= todayMillis
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean =
+                utcTimeMillis in earliestMillis..todayMillis
 
-            override fun isSelectableYear(year: Int): Boolean = year <= today.year
+            override fun isSelectableYear(year: Int): Boolean = year in earliest.year..today.year
         }
     }
     val pickerState = rememberDatePickerState(
         initialSelectedDateMillis = initial.toUtcMillis(),
-        yearRange = EARLIEST_YEAR..today.year,
+        yearRange = earliest.year..today.year,
         selectableDates = selectableDates,
     )
     DatePickerDialog(
@@ -328,7 +335,7 @@ private fun EntryDatePicker(
     }
 }
 
-/** Same as LedgerInputRules.EARLIEST_DATE's year. */
+/** Same as LedgerInputRules.EARLIEST_DATE's and DebtInputRules.EARLIEST_DAY's year. */
 private const val EARLIEST_YEAR = 2000
 
 private fun LocalDate.toUtcMillis(): Long = atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()

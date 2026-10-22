@@ -1,12 +1,14 @@
 package com.shopfinance.app.data.ledger
 
+import com.shopfinance.app.data.debts.DEBT_SCHEMA_VERSION
+import com.shopfinance.app.data.debts.DebtInputRules
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
 
 /**
- * Checks that the app's ledger limits match firestore.rules, so the app never queues a write
+ * Checks that the app's ledger and debt limits match firestore.rules, so the app never queues a write
  * the server will refuse. The rules themselves are tested against the emulator in
  * firestore-tests/.
  */
@@ -47,5 +49,16 @@ class RulesContractTest {
         assertTrue(rules.contains("data.note.size() <= ${LedgerInputRules.NOTE_MAX_LENGTH}"))
         assertTrue(rules.contains("reason.size() <= ${LedgerInputRules.VOID_REASON_MAX_LENGTH}"))
         assertTrue(rules.contains("data.schemaVersion == $ENTRY_SCHEMA_VERSION"))
+    }
+
+    @Test
+    fun debtLimitsMatch() {
+        assertTrue(rules.contains("data.amountMinor <= ${DebtInputRules.MAX_AMOUNT_MINOR}"))
+        assertTrue(rules.contains("data.currency in [${DebtInputRules.CURRENCIES.joinToString { "'${it.code}'" }}]"))
+        assertTrue(rules.contains("name.size() <= ${DebtInputRules.NAME_MAX_LENGTH}"))
+        assertTrue(rules.contains("phone.matches('^[0-9 +-]{1,${DebtInputRules.PHONE_MAX_LENGTH}}$')"))
+        assertTrue(rules.contains("data.note.size() <= ${DebtInputRules.NOTE_MAX_LENGTH}"))
+        assertTrue(rules.contains("day >= '${DebtInputRules.EARLIEST_DAY}'"))
+        assertTrue(rules.contains("data.schemaVersion == $DEBT_SCHEMA_VERSION"))
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">دفتر المحل</string>
+    <string name="app_name">iPhone World</string>
     <string name="app_tagline">إدارة النقد والديون والمصاريف لمحلك</string>
 
     <!-- Common actions -->
@@ -151,4 +151,97 @@
     <string name="void_reason_too_long">السبب طويل جدًا، الحد الأقصى %1$d حرفًا.</string>
     <string name="void_confirm">إلغاء القيد</string>
     <string name="void_dismiss">تراجع</string>
+
+    <!-- Debts: list of people who owe the shop -->
+    <string name="dashboard_action_debts">الديون</string>
+    <string name="debts_title">الديون</string>
+    <string name="debts_total_remaining">المتبقّي على الجميع</string>
+    <string name="debts_total_none">لا توجد ديون مفتوحة.</string>
+    <string name="debts_search_label">ابحث بالاسم</string>
+    <string name="debts_filter_open">مفتوحة</string>
+    <string name="debts_filter_paid">مسدّدة</string>
+    <string name="debts_filter_all">الكل</string>
+    <string name="debts_add_debtor">إضافة مدين</string>
+    <string name="debts_oldest_unpaid">أقدم دين غير مسدّد: %1$s، %2$s</string>
+    <string name="debts_settled">كل ديونه مسدّدة</string>
+    <string name="debts_no_debts">لا ديون بعد</string>
+    <string name="debts_empty_open">لا أحد عليه دين مفتوح.</string>
+    <string name="debts_empty_paid">لا أحد سدّد كل ديونه بعد.</string>
+    <string name="debts_empty_all">لم تُضِف أحدًا بعد. اضغط «إضافة مدين» للبدء.</string>
+    <string name="debts_no_match">لا أحد بهذا الاسم.</string>
+    <string name="debts_pending">تغييرات بانتظار المزامنة: %1$d</string>
+    <string name="debts_loading">جارٍ تحميل الديون…</string>
+    <string name="debts_error_access_denied">رُفض الوصول إلى الديون. قد تكون قواعد الأمان الجديدة غير منشورة في Firebase.</string>
+    <string name="debts_error_generic">تعذّر تحميل الديون. تحقّق من اتصالك ثم حاول مرة أخرى.</string>
+    <string name="debts_rejection_add">رفض الخادم حفظ تغيير، فأُزيل من الجهاز.</string>
+    <string name="debts_rejection_delete">رفض الخادم الحذف، فبقي كما هو.</string>
+    <string name="days_ago_today">اليوم</string>
+    <string name="days_ago_yesterday">أمس</string>
+    <plurals name="days_ago">
+        <item quantity="zero">منذ %1$d يوم</item>
+        <item quantity="one">منذ يوم واحد</item>
+        <item quantity="two">منذ يومين</item>
+        <item quantity="few">منذ %1$d أيام</item>
+        <item quantity="many">منذ %1$d يومًا</item>
+        <item quantity="other">منذ %1$d يوم</item>
+    </plurals>
+
+    <!-- Debts: one person's page -->
+    <string name="debtor_not_found">لم يعد هذا الشخص موجودًا.</string>
+    <string name="debtor_remaining">المتبقّي عليه</string>
+    <string name="debtor_add_debt">إضافة دين</string>
+    <string name="debtor_no_debts">لا ديون على هذا الشخص بعد. اضغط «إضافة دين».</string>
+    <string name="debt_status_open">مفتوح</string>
+    <string name="debt_status_paid">مسدّد</string>
+    <string name="debt_original_and_paid">الأصلي %1$s · المدفوع %2$s</string>
+    <string name="debt_remaining">المتبقّي %1$s</string>
+    <string name="debt_overpaid">دُفع أكثر من الدين بـ %1$s. احذف الدفعة الزائدة.</string>
+    <string name="debt_payments">الدفعات</string>
+    <string name="debt_no_payments">لا دفعات بعد.</string>
+    <string name="debt_record_payment">تسجيل دفعة</string>
+    <string name="debt_pending">بانتظار المزامنة</string>
+    <string name="action_delete">حذف</string>
+    <string name="debt_delete_title">حذف الدين</string>
+    <string name="debt_delete_body">حذف دين بقيمة %1$s بتاريخ %2$s؟</string>
+    <plurals name="debt_delete_payments">
+        <item quantity="zero">وستُحذف معه دفعاته (%1$d).</item>
+        <item quantity="one">وستُحذف معه دفعة واحدة.</item>
+        <item quantity="two">وستُحذف معه دفعتان.</item>
+        <item quantity="few">وستُحذف معه %1$d دفعات.</item>
+        <item quantity="many">وستُحذف معه %1$d دفعة.</item>
+        <item quantity="other">وستُحذف معه %1$d دفعة.</item>
+    </plurals>
+    <string name="payment_delete_title">حذف الدفعة</string>
+    <string name="payment_delete_body">حذف دفعة بقيمة %1$s بتاريخ %2$s؟ سيزيد المتبقّي على الدين بالمبلغ نفسه.</string>
+    <string name="delete_keeps_record">يختفي من القوائم والمجاميع، ويبقى محفوظًا في سجل المحل.</string>
+
+    <!-- Debts: forms -->
+    <string name="debtor_new_title">إضافة مدين</string>
+    <string name="debtor_name_label">الاسم</string>
+    <string name="debtor_phone_label">رقم الهاتف (اختياري)</string>
+    <string name="debtor_name_empty">اكتب الاسم.</string>
+    <string name="debtor_name_too_long">الاسم طويل جدًا، الحد الأقصى %1$d حرفًا.</string>
+    <string name="debtor_phone_invalid">رقم الهاتف غير صحيح. استخدم الأرقام والمسافات و+ و- فقط، حتى %1$d خانة.</string>
+    <string name="debt_new_title">دين جديد على %1$s</string>
+    <string name="debt_new_title_plain">دين جديد</string>
+    <string name="debt_currency_label">العملة</string>
+    <string name="currency_short_usd">دولار ($)</string>
+    <string name="currency_short_lbp">ليرة (ل.ل.)</string>
+    <string name="debt_amount_label">المبلغ</string>
+    <string name="debt_amount_placeholder_usd">مثلًا: 25.00</string>
+    <string name="debt_amount_placeholder_lbp">مثلًا: 500,000</string>
+    <string name="debt_date_label">يوم أخذ الدين</string>
+    <string name="debt_date_hint">اختر اليوم الذي أخذ فيه المال، حتى لو كان قديمًا.</string>
+    <string name="amount_error_lbp_decimals">مبالغ الليرة أرقام صحيحة بلا كسور.</string>
+    <string name="payment_new_title">تسجيل دفعة</string>
+    <string name="payment_debt_summary">دين بتاريخ %1$s · الأصلي %2$s</string>
+    <string name="payment_remaining">المتبقّي: %1$s</string>
+    <string name="payment_pay_in_full">دفع كامل المتبقّي</string>
+    <string name="payment_date_label">تاريخ الدفعة</string>
+    <string name="payment_more_than_remaining">المبلغ أكبر من المتبقّي (%1$s).</string>
+    <string name="payment_before_debt">لا يمكن أن تكون الدفعة قبل يوم أخذ الدين (%1$s).</string>
+    <string name="payment_in_future">لا يمكن أن يكون التاريخ في المستقبل.</string>
+    <string name="payment_debt_gone">لم يعد هذا الدين موجودًا.</string>
+    <string name="payment_debt_paid">هذا الدين مسدّد بالكامل.</string>
+    <string name="debts_save_failed">تعذّر الحفظ. تحقّق من البيانات وحاول مرة أخرى.</string>
 </resources>

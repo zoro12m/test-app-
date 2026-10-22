@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -43,8 +44,8 @@ private const val RECENT_ENTRIES = 10
 
 /**
  * The shop's home: cash on hand, today's and this month's sales and expenses, buttons to
- * record money moving, and the latest entries. Tapping an entry that is not voided offers
- * to void it ([onVoid]).
+ * record money moving, the way into the debts book, and the latest entries. Tapping an entry
+ * that is not voided offers to void it ([onVoid]).
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,6 +56,7 @@ internal fun DashboardScreen(
     onDismissRejection: () -> Unit,
     onNewEntry: (EntryType) -> Unit,
     onShowAll: () -> Unit,
+    onOpenDebts: () -> Unit,
     onVoid: (LedgerRecord) -> Unit,
     onRetry: () -> Unit,
     onSignOut: () -> Unit,
@@ -104,6 +106,12 @@ internal fun DashboardScreen(
                 }
                 item(key = "summary") { SummaryCard(summary = state.summary) }
                 item(key = "actions") { EntryActions(onNewEntry = onNewEntry) }
+                item(key = "debts") {
+                    // Debts are a separate book: they never change the cash on hand above.
+                    FilledTonalButton(onClick = onOpenDebts, modifier = Modifier.fillMaxWidth()) {
+                        Text(stringResource(R.string.dashboard_action_debts))
+                    }
+                }
                 item(key = "recent-title") {
                     Text(
                         text = stringResource(R.string.dashboard_recent),
@@ -280,6 +288,7 @@ private fun DashboardPreview() {
             onDismissRejection = {},
             onNewEntry = {},
             onShowAll = {},
+            onOpenDebts = {},
             onVoid = {},
             onRetry = {},
             onSignOut = {},

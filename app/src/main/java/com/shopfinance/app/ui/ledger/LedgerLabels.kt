@@ -8,6 +8,7 @@ import com.shopfinance.app.data.ledger.LedgerInputRules
 import com.shopfinance.app.data.ledger.LedgerRejection
 import com.shopfinance.app.data.ledger.VoidReasonError
 import com.shopfinance.domain.ledger.EntryType
+import com.shopfinance.domain.money.Currency
 
 /** What an entry of [type] is called in lists. */
 @Composable
@@ -49,12 +50,15 @@ internal fun expenseCategoryLabel(category: ExpenseCategory): String = when (cat
     ExpenseCategory.OTHER -> stringResource(R.string.category_other)
 }
 
+/** Why the typed amount is refused. Lira have no decimals, so their decimal error says that. */
 @Composable
-internal fun amountErrorMessage(error: AmountError): String = when (error) {
+internal fun amountErrorMessage(error: AmountError, currency: Currency = Currency.USD): String = when (error) {
     AmountError.EMPTY -> stringResource(R.string.amount_error_empty)
     AmountError.INVALID -> stringResource(R.string.amount_error_invalid)
     AmountError.NEGATIVE -> stringResource(R.string.amount_error_negative)
-    AmountError.TOO_MANY_DECIMALS -> stringResource(R.string.amount_error_too_many_decimals)
+    AmountError.TOO_MANY_DECIMALS -> stringResource(
+        if (currency.minorDigits == 0) R.string.amount_error_lbp_decimals else R.string.amount_error_too_many_decimals,
+    )
     AmountError.ZERO -> stringResource(R.string.amount_error_zero)
     AmountError.TOO_LARGE -> stringResource(R.string.amount_error_too_large)
 }

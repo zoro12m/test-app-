@@ -1,6 +1,6 @@
 rules_version = '2';
 
-// Shop Finance security rules, Stage 3 (shops and the cash ledger, USD only).
+// Shop Finance security rules: shops, the cash ledger (USD only) and debts (USD or LBP).
 //
 // Anything not matched below is denied. Tests: firestore-tests/ (run against the
 // Firestore emulator; see .github/workflows/firestore-rules.yml).
@@ -78,6 +78,117 @@ service cloud.firestore {
         && reason.size() <= 200;
     }
 
+    // Must agree with DebtInputRules in the app. A debtor's name: trimmed, 1..60 characters.
+    function isValidDebtorName(name) {
+      return name is string
+        && name == name.trim()
+        && name.size() >= 1
+        && name.size() <= 60;
+    }
+
+    // A phone number as the app stores it: Western digits, spaces, + and -, 1..20 characters,
+    // trimmed, with at least one digit.
+    function isValidPhone(phone) {
+      return phone is string
+        && phone == phone.trim()
+        && phone.matches('^[0-9 +-]{1,20}$')
+        && phone.matches('.*[0-9].*');
+    }
+
+    // A document id the app links to (Firestore auto ids are 20 letters and digits).
+    function isValidDocId(id) {
+      return id is string && id.matches('^[A-Za-z0-9_-]{1,64}$');
+    }
+
+    // A calendar day as the app writes it, "2026-10-01": from 2000-01-01 to the day after
+    // the server's today (slack for time zones).
+    function isValidDay(day) {
+      return day is string
+        && day.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+        && day >= '2000-01-01'
+        && dayStart(day) <= request.time + duration.value(1, 'd');
+    }
+
+    // Midnight UTC at the start of a calendar day written as "2026-10-01".
+    function dayStart(day) {
+      let parts = day.split('-');
+      return timestamp.date(int(parts[0]), int(parts[1]), int(parts[2]));
+    }
+
+    // A new debtor exactly as the app writes it; phone is left out when empty.
+    function isValidNewDebtor(data) {
+      return data.keys().hasAll(['name', 'note', 'createdBy', 'createdAt', 'schemaVersion'])
+        && data.keys().hasOnly(['name', 'phone', 'note', 'createdBy', 'createdAt', 'schemaVersion'])
+        && isValidDebtorName(data.name)
+        && (!('phone' in data) || isValidPhone(data.phone))
+        && data.note is string
+        && data.note.size() <= 200
+        && data.createdBy == request.auth.uid
+        && data.createdAt == request.time
+        && data.schemaVersion is int
+        && data.schemaVersion == 1;
+    }
+
+    // A new debt exactly as the app writes it. Amounts are whole cents (USD) or whole lira
+    // (LBP), positive, at most 10,000,000,000 of either. The debtor must be in this shop.
+    function isValidNewDebt(shopId, data) {
+      return data.keys().hasAll(['debtorId', 'amountMinor', 'currency', 'debtDate', 'note',
+                                 'createdBy', 'createdAt', 'schemaVersion'])
+        && data.keys().hasOnly(['debtorId', 'amountMinor', 'currency', 'debtDate', 'note',
+                                'createdBy', 'createdAt', 'schemaVersion'])
+        && isValidDocId(data.debtorId)
+        && exists(/databases/$(database)/documents/shops/$(shopId)/debtors/$(data.debtorId))
+        && data.amountMinor is int
+        && data.amountMinor > 0
+        && data.amountMinor <= 10000000000
+        && data.currency in ['USD', 'LBP']
+        && isValidDay(data.debtDate)
+        && data.note is string
+        && data.note.size() <= 200
+        && data.createdBy == request.auth.uid
+        && data.createdAt == request.time
+        && data.schemaVersion is int
+        && data.schemaVersion == 1;
+    }
+
+    // A new payment exactly as the app writes it, against a debt of this shop that is not
+    // deleted. It may not exceed the debt's amount or be dated before the debt. Rules cannot
+    // add up the earlier payments, so "not more than the remaining" is checked by the app.
+    function isValidNewPayment(shopId, data) {
+      return data.keys().hasAll(['debtId', 'amountMinor', 'paymentDate', 'note',
+                                 'createdBy', 'createdAt', 'schemaVersion'])
+        && data.keys().hasOnly(['debtId', 'amountMinor', 'paymentDate', 'note',
+                                'createdBy', 'createdAt', 'schemaVersion'])
+        && isValidDocId(data.debtId)
+        && isPayableDebt(get(/databases/$(database)/documents/shops/$(shopId)/debts/$(data.debtId)), data)
+        && data.note is string
+        && data.note.size() <= 200
+        && data.createdBy == request.auth.uid
+        && data.createdAt == request.time
+        && data.schemaVersion is int
+        && data.schemaVersion == 1;
+    }
+
+    // [debt] is the stored debt a new payment [data] points at, or null when there is none.
+    function isPayableDebt(debt, data) {
+      return debt != null
+        && !('deletedAt' in debt.data)
+        && data.amountMinor is int
+        && data.amountMinor > 0
+        && data.amountMinor <= debt.data.amountMinor
+        && isValidDay(data.paymentDate)
+        && data.paymentDate >= debt.data.debtDate;
+    }
+
+    // Marking a debt or payment deleted: once, by a member, and nothing else changes. The
+    // document stays, so a mistaken delete can be traced.
+    function isSoftDelete() {
+      return !('deletedAt' in resource.data)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['deletedAt', 'deletedBy'])
+        && request.resource.data.deletedAt == request.time
+        && request.resource.data.deletedBy == request.auth.uid;
+    }
+
     // Reserved for later stages; the app does not write it yet.
     match /users/{uid} {
       allow read, write: if isSignedIn() && request.auth.uid == uid;
@@ -126,6 +237,30 @@ service cloud.firestore {
           && request.resource.data.voidedBy == request.auth.uid
           && isValidVoidReason(request.resource.data.voidReason);
 
+        allow delete: if false;
+      }
+
+      // Debts: who owes the shop money (debtors), what each person took (debts) and what
+      // they paid back (debtPayments). Remaining balances are never stored; the app works
+      // them out from the payments. Nothing can be edited after saving, and nothing is ever
+      // removed: a debt or payment is only marked deleted. Must agree with DebtFields in the app.
+      match /debtors/{debtorId} {
+        allow read: if isMember(shopId);
+        allow create: if isMember(shopId) && isValidNewDebtor(request.resource.data);
+        allow update, delete: if false;
+      }
+
+      match /debts/{debtId} {
+        allow read: if isMember(shopId);
+        allow create: if isMember(shopId) && isValidNewDebt(shopId, request.resource.data);
+        allow update: if isMember(shopId) && isSoftDelete();
+        allow delete: if false;
+      }
+
+      match /debtPayments/{paymentId} {
+        allow read: if isMember(shopId);
+        allow create: if isMember(shopId) && isValidNewPayment(shopId, request.resource.data);
+        allow update: if isMember(shopId) && isSoftDelete();
         allow delete: if false;
       }
 

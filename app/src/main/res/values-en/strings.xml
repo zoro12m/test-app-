@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Shop Ledger</string>
+    <string name="app_name">iPhone World</string>
     <string name="app_tagline">Manage your shop\'s cash, debts and expenses</string>
 
     <!-- Common actions -->
@@ -151,4 +151,89 @@
     <string name="void_reason_too_long">The reason is too long: at most %1$d characters.</string>
     <string name="void_confirm">Cancel entry</string>
     <string name="void_dismiss">Keep it</string>
+
+    <!-- Debts: list of people who owe the shop -->
+    <string name="dashboard_action_debts">Debts</string>
+    <string name="debts_title">Debts</string>
+    <string name="debts_total_remaining">Total remaining</string>
+    <string name="debts_total_none">Nothing is owed.</string>
+    <string name="debts_search_label">Search by name</string>
+    <string name="debts_filter_open">Open</string>
+    <string name="debts_filter_paid">Paid</string>
+    <string name="debts_filter_all">All</string>
+    <string name="debts_add_debtor">Add debtor</string>
+    <string name="debts_oldest_unpaid">Oldest unpaid: %1$s, %2$s</string>
+    <string name="debts_settled">All debts paid</string>
+    <string name="debts_no_debts">No debts yet</string>
+    <string name="debts_empty_open">Nobody has an open debt.</string>
+    <string name="debts_empty_paid">Nobody has paid off all their debts yet.</string>
+    <string name="debts_empty_all">No one added yet. Tap Add debtor to start.</string>
+    <string name="debts_no_match">No one matches that name.</string>
+    <string name="debts_pending">Changes waiting to sync: %1$d</string>
+    <string name="debts_loading">Loading debts…</string>
+    <string name="debts_error_access_denied">Access to the debts was refused. The new security rules may not be published in Firebase yet.</string>
+    <string name="debts_error_generic">Could not load the debts. Check your connection and try again.</string>
+    <string name="debts_rejection_add">The server refused to save a change, so it was removed from this phone.</string>
+    <string name="debts_rejection_delete">The server refused the delete, so nothing changed.</string>
+    <string name="days_ago_today">today</string>
+    <string name="days_ago_yesterday">yesterday</string>
+    <plurals name="days_ago">
+        <item quantity="one">%1$d day ago</item>
+        <item quantity="other">%1$d days ago</item>
+    </plurals>
+
+    <!-- Debts: one person's page -->
+    <string name="debtor_not_found">This person is no longer here.</string>
+    <string name="debtor_remaining">Remaining</string>
+    <string name="debtor_add_debt">Add debt</string>
+    <string name="debtor_no_debts">No debts for this person yet. Tap Add debt.</string>
+    <string name="debt_status_open">Open</string>
+    <string name="debt_status_paid">Paid</string>
+    <string name="debt_original_and_paid">Original %1$s · Paid %2$s</string>
+    <string name="debt_remaining">Remaining %1$s</string>
+    <string name="debt_overpaid">Overpaid by %1$s. Delete the extra payment.</string>
+    <string name="debt_payments">Payments</string>
+    <string name="debt_no_payments">No payments yet.</string>
+    <string name="debt_record_payment">Record payment</string>
+    <string name="debt_pending">Waiting to sync</string>
+    <string name="action_delete">Delete</string>
+    <string name="debt_delete_title">Delete debt</string>
+    <string name="debt_delete_body">Delete this debt of %1$s from %2$s?</string>
+    <plurals name="debt_delete_payments">
+        <item quantity="one">Its payment is removed too.</item>
+        <item quantity="other">Its %1$d payments are removed too.</item>
+    </plurals>
+    <string name="payment_delete_title">Delete payment</string>
+    <string name="payment_delete_body">Delete this payment of %1$s from %2$s? The debt\'s remaining goes up by the same amount.</string>
+    <string name="delete_keeps_record">It disappears from lists and totals but stays in the shop\'s records.</string>
+
+    <!-- Debts: forms -->
+    <string name="debtor_new_title">Add debtor</string>
+    <string name="debtor_name_label">Name</string>
+    <string name="debtor_phone_label">Phone (optional)</string>
+    <string name="debtor_name_empty">Enter the name.</string>
+    <string name="debtor_name_too_long">The name is too long: at most %1$d characters.</string>
+    <string name="debtor_phone_invalid">That phone number is not valid. Use digits, spaces, + and - only, up to %1$d characters.</string>
+    <string name="debt_new_title">New debt for %1$s</string>
+    <string name="debt_new_title_plain">New debt</string>
+    <string name="debt_currency_label">Currency</string>
+    <string name="currency_short_usd">Dollar ($)</string>
+    <string name="currency_short_lbp">Lira (LBP)</string>
+    <string name="debt_amount_label">Amount</string>
+    <string name="debt_amount_placeholder_usd">For example: 25.00</string>
+    <string name="debt_amount_placeholder_lbp">For example: 500,000</string>
+    <string name="debt_date_label">Day the money was taken</string>
+    <string name="debt_date_hint">Pick the day the person took the money, even if it was long ago.</string>
+    <string name="amount_error_lbp_decimals">Lira amounts are whole numbers, without decimals.</string>
+    <string name="payment_new_title">Record payment</string>
+    <string name="payment_debt_summary">Debt from %1$s · Original %2$s</string>
+    <string name="payment_remaining">Remaining: %1$s</string>
+    <string name="payment_pay_in_full">Pay in full</string>
+    <string name="payment_date_label">Payment date</string>
+    <string name="payment_more_than_remaining">This is more than the remaining %1$s.</string>
+    <string name="payment_before_debt">A payment cannot be dated before the debt (%1$s).</string>
+    <string name="payment_in_future">The date cannot be in the future.</string>
+    <string name="payment_debt_gone">This debt is no longer here.</string>
+    <string name="payment_debt_paid">This debt is fully paid.</string>
+    <string name="debts_save_failed">Could not save. Check it and try again.</string>
 </resources>

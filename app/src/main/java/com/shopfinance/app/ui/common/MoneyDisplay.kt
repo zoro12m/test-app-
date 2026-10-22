@@ -3,6 +3,7 @@ package com.shopfinance.app.ui.common
 import com.shopfinance.domain.money.DigitStyle
 import com.shopfinance.domain.money.Money
 import com.shopfinance.domain.money.MoneyFormatter
+import com.shopfinance.domain.money.MoneyTotals
 
 /** Left-to-right isolate: keeps "1,234.50 $" in its own order inside Arabic text. */
 private const val LTR_ISOLATE = '\u2066'
@@ -28,3 +29,9 @@ internal fun displaySignedMoney(amount: Money, direction: Int): String {
     }
     return "$LTR_ISOLATE$sign${MoneyFormatter.format(amount.abs(), DigitStyle.LATIN)}$POP_ISOLATE"
 }
+
+/**
+ * One [displayMoney] per currency in [totals], e.g. `25.00 $ · 500,000 ل.ل.`. Dollars and lira
+ * are never added together.
+ */
+internal fun displayTotals(totals: MoneyTotals): String = totals.toList().joinToString(" · ") { displayMoney(it) }
