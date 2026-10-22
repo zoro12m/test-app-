@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Shop Ledger</string>
+    <string name="home_title">Shop Ledger</string>
+    <string name="home_welcome">Manage your shop\'s cash, debts and expenses</string>
+    <string name="home_status">Initial version: no data yet</string>
+</resources>
