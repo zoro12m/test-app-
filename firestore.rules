@@ -1,0 +1,68 @@
+rules_version = '2';
+
+// Shop Finance security rules, Stage 2 (sign-in and shop setup, USD only).
+//
+// Anything not matched below is denied. Tests: firestore-tests/ (run against the
+// Firestore emulator; see .github/workflows/firestore-rules.yml).
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Every field a shop document has, no more and no less.
+    function shopKeys() {
+      return ['name', 'ownerUid', 'memberUids', 'currency', 'createdAt', 'updatedAt', 'schemaVersion'];
+    }
+
+    // Must agree with ShopNameRules in the app: trimmed, 1..60 characters. size() counts
+    // UTF-16 code units, like Kotlin String.length; trim() strips characters <= U+0020.
+    function isValidShopName(name) {
+      return name is string
+        && name == name.trim()
+        && name.size() >= 1
+        && name.size() <= 60;
+    }
+
+    // Reserved for later stages; the app does not write it yet.
+    match /users/{uid} {
+      allow read, write: if isSignedIn() && request.auth.uid == uid;
+    }
+
+    match /shops/{shopId} {
+      // List queries are allowed only when they filter on
+      // memberUids array-contains the caller's uid.
+      allow get, list: if isSignedIn()
+        && request.auth.uid in resource.data.memberUids;
+
+      allow create: if isSignedIn()
+        && request.resource.data.keys().hasAll(shopKeys())
+        && request.resource.data.keys().hasOnly(shopKeys())
+        && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.memberUids == [request.auth.uid]
+        && request.resource.data.currency == 'USD'
+        && isValidShopName(request.resource.data.name)
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time
+        && request.resource.data.schemaVersion is int
+        && request.resource.data.schemaVersion == 1;
+
+      // Only the owner may rename the shop; nothing else may change.
+      allow update: if isSignedIn()
+        && resource.data.ownerUid == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'updatedAt'])
+        && isValidShopName(request.resource.data.name)
+        && request.resource.data.updatedAt == request.time;
+
+      allow delete: if false;
+
+      // Ledger, parties and dues arrive in Stage 3 with their own rules; until then every
+      // subcollection is denied. The collection segment is spelled out on purpose: a bare
+      // {document=**} here would also match the shop document itself (rules_version 2).
+      match /{subcollection}/{rest=**} {
+        allow read, write: if false;
+      }
+    }
+  }
+}

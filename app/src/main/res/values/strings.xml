@@ -1,7 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">دفتر المحل</string>
-    <string name="home_title">دفتر المحل</string>
-    <string name="home_welcome">إدارة النقد والديون والمصاريف لمحلك</string>
-    <string name="home_status">الإصدار الأولي: لا توجد بيانات بعد</string>
+    <string name="app_tagline">إدارة النقد والديون والمصاريف لمحلك</string>
+
+    <!-- Common actions -->
+    <string name="action_retry">إعادة المحاولة</string>
+    <string name="action_sign_out">تسجيل الخروج</string>
+    <string name="action_dismiss">حسنًا</string>
+
+    <!-- Loading and status screens -->
+    <string name="loading_session">جارٍ التحميل…</string>
+    <string name="loading_shop">جارٍ تحميل بيانات محلك…</string>
+    <string name="loading_shop_hint">يحتاج التحميل الأول على هذا الجهاز إلى اتصال بالإنترنت.</string>
+    <string name="firebase_missing_title">التطبيق غير مُعَدّ بعد</string>
+    <string name="firebase_missing_body">بُنيت هذه النسخة من التطبيق بدون إعدادات Firebase (ملف google-services.json)، لذلك لا يمكن تسجيل الدخول أو حفظ البيانات. ثبّت نسخة تتضمن هذه الإعدادات.</string>
+    <string name="shops_error_title">تعذّر تحميل بيانات المحل</string>
+    <string name="shops_error_access_denied">رُفض الوصول إلى البيانات. قد تكون قواعد الأمان في Firebase غير منشورة بعد.</string>
+    <string name="shops_error_generic">حدث خطأ أثناء تحميل البيانات. تحقّق من اتصالك بالإنترنت ثم حاول مرة أخرى.</string>
+
+    <!-- Sign in and sign up -->
+    <string name="auth_sign_in_title">تسجيل الدخول</string>
+    <string name="auth_sign_up_title">إنشاء حساب جديد</string>
+    <string name="auth_name_label">اسمك</string>
+    <string name="auth_email_label">البريد الإلكتروني</string>
+    <string name="auth_password_label">كلمة المرور</string>
+    <string name="auth_password_show">إظهار</string>
+    <string name="auth_password_hide">إخفاء</string>
+    <string name="auth_password_hint">%1$d أحرف على الأقل</string>
+    <string name="auth_sign_in_button">دخول</string>
+    <string name="auth_sign_up_button">إنشاء الحساب</string>
+    <string name="auth_forgot_password">نسيت كلمة المرور؟</string>
+    <string name="auth_switch_to_sign_up">ليس لديك حساب؟ أنشئ حسابًا جديدًا</string>
+    <string name="auth_switch_to_sign_in">لديك حساب؟ سجّل الدخول</string>
+    <string name="auth_reset_email_sent">إذا كان هذا البريد مسجّلًا لدينا، فستصلك رسالة فيها رابط لإعادة تعيين كلمة المرور.</string>
+
+    <!-- Sign-in and sign-up field checks -->
+    <string name="auth_name_empty">اكتب اسمك.</string>
+    <string name="auth_name_too_long">الاسم طويل جدًا، الحد الأقصى %1$d حرفًا.</string>
+    <string name="auth_email_empty">اكتب بريدك الإلكتروني.</string>
+    <string name="auth_email_invalid">صيغة البريد الإلكتروني غير صحيحة.</string>
+    <string name="auth_password_empty">اكتب كلمة المرور.</string>
+    <string name="auth_password_too_short">كلمة المرور قصيرة، يجب أن تتكون من %1$d أحرف على الأقل.</string>
+
+    <!-- Sign-in and sign-up errors reported by the server -->
+    <string name="auth_error_invalid_credentials">البريد الإلكتروني أو كلمة المرور غير صحيحة.</string>
+    <string name="auth_error_invalid_email">عنوان البريد الإلكتروني غير صالح.</string>
+    <string name="auth_error_email_in_use">يوجد حساب بهذا البريد الإلكتروني. سجّل الدخول بدلًا من إنشاء حساب جديد.</string>
+    <string name="auth_error_weak_password">كلمة المرور ضعيفة. اختر كلمة مرور أقوى.</string>
+    <string name="auth_error_user_disabled">تم إيقاف هذا الحساب.</string>
+    <string name="auth_error_too_many_requests">محاولات كثيرة. انتظر قليلًا ثم حاول مرة أخرى.</string>
+    <string name="auth_error_network">تعذّر الاتصال بالخادم. تحقّق من اتصالك بالإنترنت ثم حاول مرة أخرى.</string>
+    <string name="auth_error_unknown">حدث خطأ غير متوقع. حاول مرة أخرى.</string>
+
+    <!-- Shop setup -->
+    <string name="shop_setup_title">أنشئ محلك</string>
+    <string name="shop_setup_body">اكتب اسم محلك كما تريد أن يظهر في التطبيق.</string>
+    <string name="shop_name_label">اسم المحل</string>
+    <string name="shop_name_placeholder">مثلًا: سوبرماركت الأمل</string>
+    <string name="shop_name_empty">اكتب اسم المحل.</string>
+    <string name="shop_name_too_long">اسم المحل طويل جدًا، الحد الأقصى %1$d حرفًا.</string>
+    <string name="shop_currency_label">العملة</string>
+    <string name="shop_currency_note">تُسجَّل كل المبالغ بالدولار الأمريكي حاليًا.</string>
+    <string name="shop_create_button">إنشاء المحل</string>
+    <string name="shop_create_failed">تعذّر إنشاء المحل. حاول مرة أخرى.</string>
+
+    <!-- Currencies -->
+    <string name="currency_usd">الدولار الأمريكي (USD)</string>
+
+    <!-- Home -->
+    <string name="home_greeting">مرحبًا بك</string>
+    <string name="home_greeting_named">مرحبًا، %1$s</string>
+    <string name="home_shop_ready">محلك «%1$s» جاهز.</string>
+    <string name="home_currency">العملة: %1$s</string>
+    <string name="home_next_update">تسجيل المبيعات والمصاريف سيتوفر في التحديث القادم.</string>
 </resources>
