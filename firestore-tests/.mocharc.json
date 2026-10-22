@@ -1,0 +1,5 @@
+{
+  "require": ["test/env.js"],
+  "spec": ["test/**/*.test.js"],
+  "timeout": 20000
+}

@@ -1,7 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Shop Ledger</string>
-    <string name="home_title">Shop Ledger</string>
-    <string name="home_welcome">Manage your shop\'s cash, debts and expenses</string>
-    <string name="home_status">Initial version: no data yet</string>
+    <string name="app_tagline">Manage your shop\'s cash, debts and expenses</string>
+
+    <!-- Common actions -->
+    <string name="action_retry">Try again</string>
+    <string name="action_sign_out">Sign out</string>
+    <string name="action_dismiss">OK</string>
+
+    <!-- Loading and status screens -->
+    <string name="loading_session">Loading…</string>
+    <string name="loading_shop">Loading your shop…</string>
+    <string name="loading_shop_hint">The first load on this device needs an internet connection.</string>
+    <string name="firebase_missing_title">The app is not set up yet</string>
+    <string name="firebase_missing_body">This build was made without its Firebase settings (the google-services.json file), so signing in and saving data are not possible. Install a build that includes them.</string>
+    <string name="shops_error_title">Could not load your shop</string>
+    <string name="shops_error_access_denied">Access to the data was refused. The Firebase security rules may not be published yet.</string>
+    <string name="shops_error_generic">Something went wrong while loading the data. Check your internet connection and try again.</string>
+
+    <!-- Sign in and sign up -->
+    <string name="auth_sign_in_title">Sign in</string>
+    <string name="auth_sign_up_title">Create an account</string>
+    <string name="auth_name_label">Your name</string>
+    <string name="auth_email_label">Email</string>
+    <string name="auth_password_label">Password</string>
+    <string name="auth_password_show">Show</string>
+    <string name="auth_password_hide">Hide</string>
+    <string name="auth_password_hint">At least %1$d characters</string>
+    <string name="auth_sign_in_button">Sign in</string>
+    <string name="auth_sign_up_button">Create account</string>
+    <string name="auth_forgot_password">Forgot password?</string>
+    <string name="auth_switch_to_sign_up">No account yet? Create one</string>
+    <string name="auth_switch_to_sign_in">Already have an account? Sign in</string>
+    <string name="auth_reset_email_sent">If this email has an account, a link to reset the password is on its way.</string>
+
+    <!-- Sign-in and sign-up field checks -->
+    <string name="auth_name_empty">Enter your name.</string>
+    <string name="auth_name_too_long">The name is too long: at most %1$d characters.</string>
+    <string name="auth_email_empty">Enter your email.</string>
+    <string name="auth_email_invalid">This email address is not valid.</string>
+    <string name="auth_password_empty">Enter your password.</string>
+    <string name="auth_password_too_short">The password is too short: use at least %1$d characters.</string>
+
+    <!-- Sign-in and sign-up errors reported by the server -->
+    <string name="auth_error_invalid_credentials">The email or password is incorrect.</string>
+    <string name="auth_error_invalid_email">The email address is not valid.</string>
+    <string name="auth_error_email_in_use">An account with this email already exists. Sign in instead.</string>
+    <string name="auth_error_weak_password">The password is too weak. Choose a stronger one.</string>
+    <string name="auth_error_user_disabled">This account has been disabled.</string>
+    <string name="auth_error_too_many_requests">Too many attempts. Wait a little, then try again.</string>
+    <string name="auth_error_network">Could not reach the server. Check your internet connection and try again.</string>
+    <string name="auth_error_unknown">Something went wrong. Please try again.</string>
+
+    <!-- Shop setup -->
+    <string name="shop_setup_title">Set up your shop</string>
+    <string name="shop_setup_body">Enter your shop name as you want it to appear in the app.</string>
+    <string name="shop_name_label">Shop name</string>
+    <string name="shop_name_placeholder">For example: Al Amal Market</string>
+    <string name="shop_name_empty">Enter the shop name.</string>
+    <string name="shop_name_too_long">The shop name is too long: at most %1$d characters.</string>
+    <string name="shop_currency_label">Currency</string>
+    <string name="shop_currency_note">All amounts are recorded in US dollars for now.</string>
+    <string name="shop_create_button">Create shop</string>
+    <string name="shop_create_failed">Could not create the shop. Please try again.</string>
+
+    <!-- Currencies -->
+    <string name="currency_usd">US dollar (USD)</string>
+
+    <!-- Home -->
+    <string name="home_greeting">Welcome</string>
+    <string name="home_greeting_named">Welcome, %1$s</string>
+    <string name="home_shop_ready">Your shop “%1$s” is ready.</string>
+    <string name="home_currency">Currency: %1$s</string>
+    <string name="home_next_update">Recording sales and expenses is coming in the next update.</string>
 </resources>
