@@ -7,6 +7,9 @@
     <string name="action_retry">إعادة المحاولة</string>
     <string name="action_sign_out">تسجيل الخروج</string>
     <string name="action_dismiss">حسنًا</string>
+    <string name="action_back">رجوع</string>
+    <string name="action_cancel">تراجع</string>
+    <string name="action_save">حفظ</string>
 
     <!-- Loading and status screens -->
     <string name="loading_session">جارٍ التحميل…</string>
@@ -67,10 +70,85 @@
     <!-- Currencies -->
     <string name="currency_usd">الدولار الأمريكي (USD)</string>
 
-    <!-- Home -->
-    <string name="home_greeting">مرحبًا بك</string>
-    <string name="home_greeting_named">مرحبًا، %1$s</string>
-    <string name="home_shop_ready">محلك «%1$s» جاهز.</string>
-    <string name="home_currency">العملة: %1$s</string>
-    <string name="home_next_update">تسجيل المبيعات والمصاريف سيتوفر في التحديث القادم.</string>
+    <!-- Entry types -->
+    <string name="entry_type_sale">بيع</string>
+    <string name="entry_type_expense">مصروف</string>
+    <string name="entry_type_capital_in">إيداع من صاحب المحل</string>
+    <string name="entry_type_capital_out">سحب لصاحب المحل</string>
+
+    <!-- New entry form -->
+    <string name="entry_new_title_sale">تسجيل بيع</string>
+    <string name="entry_new_title_expense">تسجيل مصروف</string>
+    <string name="entry_new_title_capital_in">إيداع في الصندوق</string>
+    <string name="entry_new_title_capital_out">سحب من الصندوق</string>
+    <string name="entry_new_hint_capital_in">مال يضعه صاحب المحل في الصندوق، مثل رأس المال أو نقد البداية.</string>
+    <string name="entry_new_hint_capital_out">مال يأخذه صاحب المحل من الصندوق لنفسه.</string>
+    <string name="entry_amount_label">المبلغ بالدولار</string>
+    <string name="entry_amount_placeholder">مثلًا: 12.50</string>
+    <string name="entry_category_label">نوع المصروف</string>
+    <string name="entry_category_missing">اختر نوع المصروف.</string>
+    <string name="entry_date_label">التاريخ</string>
+    <string name="entry_date_today">اليوم</string>
+    <string name="entry_date_yesterday">أمس</string>
+    <string name="entry_date_other">تاريخ آخر</string>
+    <string name="entry_date_with_day">%1$s، %2$s</string>
+    <string name="entry_date_pick_confirm">اختيار</string>
+    <string name="entry_note_label">ملاحظة (اختياري)</string>
+    <string name="entry_note_too_long">الملاحظة طويلة جدًا، الحد الأقصى %1$d حرفًا.</string>
+    <string name="entry_save_failed">تعذّر حفظ القيد. تحقّق من البيانات وحاول مرة أخرى.</string>
+
+    <!-- Amount checks -->
+    <string name="amount_error_empty">اكتب المبلغ.</string>
+    <string name="amount_error_invalid">المبلغ غير صحيح. استخدم أرقامًا ونقطة للكسور، مثل 12.50.</string>
+    <string name="amount_error_negative">اكتب المبلغ بدون إشارة سالب.</string>
+    <string name="amount_error_too_many_decimals">يُقبل رقمان بعد الفاصلة فقط (السنتات).</string>
+    <string name="amount_error_zero">يجب أن يكون المبلغ أكبر من صفر.</string>
+    <string name="amount_error_too_large">المبلغ كبير جدًا.</string>
+
+    <!-- Expense categories -->
+    <string name="category_goods">شراء بضاعة</string>
+    <string name="category_rent">إيجار</string>
+    <string name="category_electricity">كهرباء واشتراك مولّد</string>
+    <string name="category_salaries">رواتب</string>
+    <string name="category_transport">نقل وتوصيل</string>
+    <string name="category_maintenance">صيانة</string>
+    <string name="category_other">أخرى</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_cash_on_hand">النقد في الصندوق</string>
+    <string name="dashboard_cash_on_hand_hint">حسب القيود المسجّلة في التطبيق.</string>
+    <string name="dashboard_today">اليوم</string>
+    <string name="dashboard_this_month">هذا الشهر</string>
+    <string name="dashboard_sales">المبيعات</string>
+    <string name="dashboard_expenses">المصاريف</string>
+    <string name="dashboard_month_net">الصافي (المبيعات ناقص المصاريف)</string>
+    <string name="dashboard_action_sale">تسجيل بيع</string>
+    <string name="dashboard_action_expense">تسجيل مصروف</string>
+    <string name="dashboard_action_capital_in">إيداع</string>
+    <string name="dashboard_action_capital_out">سحب</string>
+    <string name="dashboard_recent">آخر القيود</string>
+    <string name="dashboard_empty">لا توجد قيود بعد. ابدأ بتسجيل أول عملية بيع، أو أودِع نقد البداية في الصندوق.</string>
+    <string name="dashboard_show_all">عرض كل القيود</string>
+
+    <!-- Entries and sync -->
+    <string name="entries_title">كل القيود</string>
+    <string name="entries_empty">لا توجد قيود بعد.</string>
+    <string name="entry_pending">بانتظار المزامنة</string>
+    <string name="entry_voided">ملغى: %1$s</string>
+    <string name="ledger_pending">قيود بانتظار المزامنة: %1$d</string>
+    <string name="ledger_loading">جارٍ تحميل القيود…</string>
+    <string name="ledger_error_access_denied">رُفض الوصول إلى القيود. قد تكون قواعد الأمان الجديدة غير منشورة في Firebase.</string>
+    <string name="ledger_error_generic">تعذّر تحميل القيود. تحقّق من اتصالك ثم حاول مرة أخرى.</string>
+    <string name="rejection_access_denied">رفض الخادم التغيير لأن قواعد الأمان الجديدة غير منشورة. انشر القواعد ثم حاول مرة أخرى.</string>
+    <string name="rejection_add">رفض الخادم حفظ قيد، فأُزيل من الجهاز.</string>
+    <string name="rejection_void">رفض الخادم إلغاء قيد، فبقي القيد كما هو.</string>
+
+    <!-- Cancel (void) an entry -->
+    <string name="void_title">إلغاء القيد</string>
+    <string name="void_body">يبقى القيد ظاهرًا في السجل مع سبب الإلغاء، ولا يُحسب في الأرصدة. لا يمكن التراجع عن الإلغاء.</string>
+    <string name="void_reason_label">سبب الإلغاء</string>
+    <string name="void_reason_empty">اكتب سبب الإلغاء.</string>
+    <string name="void_reason_too_long">السبب طويل جدًا، الحد الأقصى %1$d حرفًا.</string>
+    <string name="void_confirm">إلغاء القيد</string>
+    <string name="void_dismiss">تراجع</string>
 </resources>

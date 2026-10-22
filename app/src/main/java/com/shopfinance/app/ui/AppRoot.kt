@@ -11,7 +11,7 @@ import com.shopfinance.app.AppContainer
 import com.shopfinance.app.R
 import com.shopfinance.app.ui.auth.AuthScreen
 import com.shopfinance.app.ui.auth.AuthViewModel
-import com.shopfinance.app.ui.home.HomeScreen
+import com.shopfinance.app.ui.ledger.ShopHost
 import com.shopfinance.app.ui.session.SessionState
 import com.shopfinance.app.ui.session.SessionViewModel
 import com.shopfinance.app.ui.shop.ShopSetupScreen
@@ -68,7 +68,8 @@ private fun SessionRoot(container: AppContainer) {
             ShopSetupScreen(viewModel = setupViewModel, onSignOut = sessionViewModel::signOut)
         }
 
-        is SessionState.Ready -> HomeScreen(
+        is SessionState.Ready -> ShopHost(
+            container = container,
             user = session.user,
             shop = session.shop,
             onSignOut = sessionViewModel::signOut,

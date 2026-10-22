@@ -1,5 +1,7 @@
 package com.shopfinance.app.data.shop
 
+import com.shopfinance.app.data.text.SingleLineText
+
 /** Why a shop name was rejected by [ShopNameRules.validate]. */
 enum class ShopNameError {
     /** Empty, or nothing but whitespace. */
@@ -17,33 +19,8 @@ enum class ShopNameError {
 object ShopNameRules {
     const val MAX_LENGTH = 60
 
-    /**
-     * The name as it is stored: trimmed, with every internal run of separators (spaces,
-     * tabs, line breaks, no-break spaces, control characters) collapsed to one plain space.
-     * See [isSeparator] for why control characters count.
-     */
-    fun normalize(raw: String): String {
-        val result = StringBuilder(raw.length)
-        var pendingSpace = false
-        for (char in raw.trim { isSeparator(it) }) {
-            if (isSeparator(char)) {
-                pendingSpace = true
-            } else {
-                if (pendingSpace) result.append(' ')
-                pendingSpace = false
-                result.append(char)
-            }
-        }
-        return result.toString()
-    }
-
-    /**
-     * Kotlin whitespace, plus every character up to U+0020. The security rules' trim()
-     * strips all of U+0000..U+0020, but Kotlin's isWhitespace() is false for most control
-     * characters (U+0000..U+0008, U+000E..U+001B). Without this, a pasted "\u0001Shop" would
-     * pass [validate] and then be refused by the server.
-     */
-    private fun isSeparator(char: Char): Boolean = char <= ' ' || char.isWhitespace()
+    /** The name as it is stored; see [SingleLineText.normalize]. */
+    fun normalize(raw: String): String = SingleLineText.normalize(raw)
 
     /**
      * Checks [raw] after [normalize]. Returns null when it is a valid name. The length is

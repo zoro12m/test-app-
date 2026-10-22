@@ -97,3 +97,39 @@ export async function seedShops() {
     await seed(`shops/${ALICE_SHOP}`, { ...base, name: 'متجر الأمل', memberUids: [ALICE] });
     await seed(`shops/${SHARED_SHOP}`, { ...base, name: 'متجر مشترك', memberUids: [ALICE, CAROL] });
 }
+
+/** Every field a new ledger entry may have; categoryId only on expenses. */
+export const ENTRY_KEYS = [
+    'type',
+    'amountMinor',
+    'currency',
+    'occurredAt',
+    'note',
+    'createdBy',
+    'createdAt',
+    'schemaVersion',
+];
+
+/** A new ledger entry exactly as the app writes it (a 12.50 USD cash sale), with optional overrides. */
+export function newEntryData(uid, overrides = {}) {
+    return {
+        type: 'sale',
+        amountMinor: 1250,
+        currency: 'USD',
+        occurredAt: Timestamp.fromDate(new Date('2026-10-01T10:00:00Z')),
+        note: '',
+        createdBy: uid,
+        createdAt: serverTimestamp(),
+        schemaVersion: 1,
+        ...overrides,
+    };
+}
+
+/** A stored entry as the server keeps it after create (timestamps resolved). */
+export function storedEntryData(uid, overrides = {}) {
+    return {
+        ...newEntryData(uid),
+        createdAt: Timestamp.fromDate(new Date('2026-10-01T10:00:05Z')),
+        ...overrides,
+    };
+}

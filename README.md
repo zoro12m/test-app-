@@ -24,8 +24,22 @@ npm run test:emulator
 Rules are not deployed by CI. After a change to `firestore.rules` is merged, publish it in the Firebase console
 (Firestore Database > Rules: paste the file, then Publish) or with `firebase deploy --only firestore:rules`.
 Until the rules are published the app cannot read or create shops and shows an "access refused" screen.
+Each stage that adds data adds rules too: after Stage 3 is merged, publish again or the dashboard shows
+"access to the entries was refused".
+
+## What the app does so far
+
+- Stage 2: sign in or create an account, then create the shop.
+- Stage 3: the cash ledger. Record sales, expenses (with a category), and money the owner puts in or takes out.
+  The dashboard shows cash on hand and today's and this month's sales and expenses; the entries list shows
+  everything. Entries are never edited or deleted: a mistake is fixed by cancelling (voiding) the entry with a
+  reason, and it stays in the list, struck through. Entries are written to the phone first and synced when online;
+  unsynced ones are marked.
+
+Entries are stored under `shops/{shopId}/entries/{entryId}` with the amount in cents (`amountMinor`), and every
+total is computed from the entries. Customer debts, suppliers and due dates come in later stages.
 
 ## Currency
 
-Stage 2 handles USD only: new shops are created in USD and the rules reject anything else. The domain module
+The app handles USD only: shops and entries are in USD and the rules reject anything else. The domain module
 still supports LBP for a later stage.

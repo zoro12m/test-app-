@@ -1,6 +1,6 @@
 rules_version = '2';
 
-// Shop Finance security rules, Stage 2 (sign-in and shop setup, USD only).
+// Shop Finance security rules, Stage 3 (shops and the cash ledger, USD only).
 //
 // Anything not matched below is denied. Tests: firestore-tests/ (run against the
 // Firestore emulator; see .github/workflows/firestore-rules.yml).
@@ -23,6 +23,59 @@ service cloud.firestore {
         && name == name.trim()
         && name.size() >= 1
         && name.size() <= 60;
+    }
+
+    // True when the caller is listed in the shop's memberUids. Used by the shop's
+    // subcollections; get() reads the shop document once per request.
+    function isMember(shopId) {
+      return isSignedIn()
+        && request.auth.uid in get(/databases/$(database)/documents/shops/$(shopId)).data.memberUids;
+    }
+
+    // Ledger entry types Stage 3 records: cash only, no customer or supplier. The
+    // credit types (debt_given, liability_in, ...) come with parties in a later stage.
+    function entryTypes() {
+      return ['sale', 'expense', 'capital_in', 'capital_out'];
+    }
+
+    // Expense categories, the same list as ExpenseCategory in the app.
+    function expenseCategories() {
+      return ['goods', 'rent', 'electricity', 'salaries', 'transport', 'maintenance', 'other'];
+    }
+
+    // A new entry exactly as the app writes it. Amounts are whole cents, positive, at
+    // most 100,000,000.00 USD; the entry type decides which way the money moves.
+    function isValidNewEntry(data) {
+      return data.keys().hasAll(['type', 'amountMinor', 'currency', 'occurredAt', 'note',
+                                 'createdBy', 'createdAt', 'schemaVersion'])
+        && data.keys().hasOnly(['type', 'amountMinor', 'currency', 'occurredAt', 'note',
+                                'createdBy', 'createdAt', 'schemaVersion', 'categoryId'])
+        && data.type in entryTypes()
+        && data.amountMinor is int
+        && data.amountMinor > 0
+        && data.amountMinor <= 10000000000
+        && data.currency == 'USD'
+        && data.occurredAt is timestamp
+        && data.occurredAt >= timestamp.date(2000, 1, 1)
+        // A day of slack for clocks and time zones; nothing further in the future.
+        && data.occurredAt <= request.time + duration.value(1, 'd')
+        && data.note is string
+        && data.note.size() <= 200
+        && data.createdBy == request.auth.uid
+        && data.createdAt == request.time
+        && data.schemaVersion is int
+        && data.schemaVersion == 1
+        && (data.type == 'expense'
+              ? data.get('categoryId', null) in expenseCategories()
+              : !data.keys().hasAny(['categoryId']));
+    }
+
+    // Why an entry was voided: trimmed, 1..200 characters, like LedgerInputRules in the app.
+    function isValidVoidReason(reason) {
+      return reason is string
+        && reason == reason.trim()
+        && reason.size() >= 1
+        && reason.size() <= 200;
     }
 
     // Reserved for later stages; the app does not write it yet.
@@ -57,9 +110,29 @@ service cloud.firestore {
 
       allow delete: if false;
 
-      // Ledger, parties and dues arrive in Stage 3 with their own rules; until then every
-      // subcollection is denied. The collection segment is spelled out on purpose: a bare
-      // {document=**} here would also match the shop document itself (rules_version 2).
+      // The shop's ledger: one document per cash entry. Entries are append-only: the only
+      // change allowed after creation is voiding it once, with a reason. Must agree with
+      // LedgerFields and newEntryFields in the app.
+      match /entries/{entryId} {
+        allow read: if isMember(shopId);
+
+        allow create: if isMember(shopId) && isValidNewEntry(request.resource.data);
+
+        allow update: if isMember(shopId)
+          && !('voidedAt' in resource.data)
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['voidedAt', 'voidReason', 'voidedBy'])
+          && request.resource.data.voidedAt == request.time
+          && request.resource.data.voidedBy == request.auth.uid
+          && isValidVoidReason(request.resource.data.voidReason);
+
+        allow delete: if false;
+      }
+
+      // Parties, dues and anything else arrive in later stages with their own rules;
+      // until then every other subcollection is denied (an allow above still applies,
+      // rules only ever add access). The collection segment is spelled out on purpose:
+      // a bare {document=**} here would also match the shop document itself.
       match /{subcollection}/{rest=**} {
         allow read, write: if false;
       }
