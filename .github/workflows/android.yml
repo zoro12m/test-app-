@@ -35,8 +35,8 @@ jobs:
             echo "GOOGLE_SERVICES_JSON secret not set; building without Firebase config"
           fi
 
-      - name: Unit tests
-        run: ./gradlew test --stacktrace
+      - name: Unit tests (domain + app)
+        run: ./gradlew :domain:test :app:testDebugUnitTest --stacktrace
 
       - name: Build debug APK
         run: ./gradlew assembleDebug --stacktrace
