@@ -3,7 +3,7 @@ import { collection, deleteDoc, doc, getDoc, getDocs, setDoc } from 'firebase/fi
 
 import { ALICE, ALICE_SHOP, BOB, CAROL, dbAs, seed, seedShops, SHARED_SHOP } from './env.js';
 
-describe('shops subcollections (Stage 3 placeholders)', () => {
+describe('shops: other subcollections (later stages)', () => {
     beforeEach(async () => {
         await seedShops();
         await seed(`shops/${ALICE_SHOP}/ledger/entry-1`, { amountMinor: 1000 });

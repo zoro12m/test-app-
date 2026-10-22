@@ -7,6 +7,9 @@
     <string name="action_retry">Try again</string>
     <string name="action_sign_out">Sign out</string>
     <string name="action_dismiss">OK</string>
+    <string name="action_back">Back</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_save">Save</string>
 
     <!-- Loading and status screens -->
     <string name="loading_session">Loading…</string>
@@ -67,10 +70,85 @@
     <!-- Currencies -->
     <string name="currency_usd">US dollar (USD)</string>
 
-    <!-- Home -->
-    <string name="home_greeting">Welcome</string>
-    <string name="home_greeting_named">Welcome, %1$s</string>
-    <string name="home_shop_ready">Your shop “%1$s” is ready.</string>
-    <string name="home_currency">Currency: %1$s</string>
-    <string name="home_next_update">Recording sales and expenses is coming in the next update.</string>
+    <!-- Entry types -->
+    <string name="entry_type_sale">Sale</string>
+    <string name="entry_type_expense">Expense</string>
+    <string name="entry_type_capital_in">Owner deposit</string>
+    <string name="entry_type_capital_out">Owner withdrawal</string>
+
+    <!-- New entry form -->
+    <string name="entry_new_title_sale">Record a sale</string>
+    <string name="entry_new_title_expense">Record an expense</string>
+    <string name="entry_new_title_capital_in">Put money in</string>
+    <string name="entry_new_title_capital_out">Take money out</string>
+    <string name="entry_new_hint_capital_in">Money the owner puts into the till, such as starting cash.</string>
+    <string name="entry_new_hint_capital_out">Money the owner takes out of the till for themselves.</string>
+    <string name="entry_amount_label">Amount in dollars</string>
+    <string name="entry_amount_placeholder">For example: 12.50</string>
+    <string name="entry_category_label">Expense type</string>
+    <string name="entry_category_missing">Choose the expense type.</string>
+    <string name="entry_date_label">Date</string>
+    <string name="entry_date_today">Today</string>
+    <string name="entry_date_yesterday">Yesterday</string>
+    <string name="entry_date_other">Other date</string>
+    <string name="entry_date_with_day">%1$s, %2$s</string>
+    <string name="entry_date_pick_confirm">Select</string>
+    <string name="entry_note_label">Note (optional)</string>
+    <string name="entry_note_too_long">The note is too long: at most %1$d characters.</string>
+    <string name="entry_save_failed">Could not save the entry. Check it and try again.</string>
+
+    <!-- Amount checks -->
+    <string name="amount_error_empty">Enter the amount.</string>
+    <string name="amount_error_invalid">That amount is not valid. Use digits and a point for cents, like 12.50.</string>
+    <string name="amount_error_negative">Enter the amount without a minus sign.</string>
+    <string name="amount_error_too_many_decimals">Use at most two digits after the point (cents).</string>
+    <string name="amount_error_zero">The amount must be more than zero.</string>
+    <string name="amount_error_too_large">The amount is too large.</string>
+
+    <!-- Expense categories -->
+    <string name="category_goods">Stock purchase</string>
+    <string name="category_rent">Rent</string>
+    <string name="category_electricity">Electricity and generator</string>
+    <string name="category_salaries">Salaries</string>
+    <string name="category_transport">Transport and delivery</string>
+    <string name="category_maintenance">Maintenance</string>
+    <string name="category_other">Other</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_cash_on_hand">Cash on hand</string>
+    <string name="dashboard_cash_on_hand_hint">Based on the entries recorded in the app.</string>
+    <string name="dashboard_today">Today</string>
+    <string name="dashboard_this_month">This month</string>
+    <string name="dashboard_sales">Sales</string>
+    <string name="dashboard_expenses">Expenses</string>
+    <string name="dashboard_month_net">Net (sales minus expenses)</string>
+    <string name="dashboard_action_sale">Record sale</string>
+    <string name="dashboard_action_expense">Record expense</string>
+    <string name="dashboard_action_capital_in">Deposit</string>
+    <string name="dashboard_action_capital_out">Withdraw</string>
+    <string name="dashboard_recent">Latest entries</string>
+    <string name="dashboard_empty">No entries yet. Start by recording a sale, or deposit your starting cash.</string>
+    <string name="dashboard_show_all">Show all entries</string>
+
+    <!-- Entries and sync -->
+    <string name="entries_title">All entries</string>
+    <string name="entries_empty">No entries yet.</string>
+    <string name="entry_pending">Waiting to sync</string>
+    <string name="entry_voided">Cancelled: %1$s</string>
+    <string name="ledger_pending">Entries waiting to sync: %1$d</string>
+    <string name="ledger_loading">Loading entries…</string>
+    <string name="ledger_error_access_denied">Access to the entries was refused. The new security rules may not be published in Firebase yet.</string>
+    <string name="ledger_error_generic">Could not load the entries. Check your connection and try again.</string>
+    <string name="rejection_access_denied">The server refused the change because the new security rules are not published. Publish them, then try again.</string>
+    <string name="rejection_add">The server refused to save an entry, so it was removed from this phone.</string>
+    <string name="rejection_void">The server refused to cancel an entry, so it stays as it was.</string>
+
+    <!-- Cancel (void) an entry -->
+    <string name="void_title">Cancel entry</string>
+    <string name="void_body">The entry stays in the list with the reason, but no longer counts in the totals. This cannot be undone.</string>
+    <string name="void_reason_label">Reason</string>
+    <string name="void_reason_empty">Enter a reason.</string>
+    <string name="void_reason_too_long">The reason is too long: at most %1$d characters.</string>
+    <string name="void_confirm">Cancel entry</string>
+    <string name="void_dismiss">Keep it</string>
 </resources>
