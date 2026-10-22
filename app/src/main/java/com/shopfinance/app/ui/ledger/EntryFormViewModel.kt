@@ -24,7 +24,7 @@ import java.time.ZoneId
 /** Why the typed amount is not accepted. */
 enum class AmountError { EMPTY, INVALID, NEGATIVE, TOO_MANY_DECIMALS, ZERO, TOO_LARGE }
 
-/** The typed amount, read as USD by [EntryFormViewModel.parseAmount]. */
+/** The typed amount, read by [parseMoneyInput]. */
 sealed interface AmountInput {
     data class Valid(val money: Money) : AmountInput
     data class Invalid(val error: AmountError) : AmountInput
@@ -127,21 +127,28 @@ class EntryFormViewModel(
     companion object {
         /** The typed [text] as USD, or why it is not accepted. */
         internal fun parseAmount(text: String): AmountInput =
-            when (val result = MoneyParser.parse(text, Currency.USD, RoundingMode.UNNECESSARY)) {
-                is MoneyParseResult.Success -> when {
-                    result.money.isZero -> AmountInput.Invalid(AmountError.ZERO)
-                    result.money.minor > LedgerInputRules.MAX_AMOUNT_MINOR -> AmountInput.Invalid(AmountError.TOO_LARGE)
-                    else -> AmountInput.Valid(result.money)
-                }
-                is MoneyParseResult.Failure -> AmountInput.Invalid(
-                    when (result.error) {
-                        MoneyParseError.EMPTY -> AmountError.EMPTY
-                        MoneyParseError.INVALID_FORMAT -> AmountError.INVALID
-                        MoneyParseError.NEGATIVE -> AmountError.NEGATIVE
-                        MoneyParseError.TOO_MANY_DECIMALS -> AmountError.TOO_MANY_DECIMALS
-                        MoneyParseError.OUT_OF_RANGE -> AmountError.TOO_LARGE
-                    },
-                )
-            }
+            parseMoneyInput(text, Currency.USD, LedgerInputRules.MAX_AMOUNT_MINOR)
     }
 }
+
+/**
+ * The typed [text] (Western or Arabic digits) as an exact amount of [currency], or why it is
+ * not accepted. Zero is refused, and so is anything above [maxMinor] minor units.
+ */
+internal fun parseMoneyInput(text: String, currency: Currency, maxMinor: Long): AmountInput =
+    when (val result = MoneyParser.parse(text, currency, RoundingMode.UNNECESSARY)) {
+        is MoneyParseResult.Success -> when {
+            result.money.isZero -> AmountInput.Invalid(AmountError.ZERO)
+            result.money.minor > maxMinor -> AmountInput.Invalid(AmountError.TOO_LARGE)
+            else -> AmountInput.Valid(result.money)
+        }
+        is MoneyParseResult.Failure -> AmountInput.Invalid(
+            when (result.error) {
+                MoneyParseError.EMPTY -> AmountError.EMPTY
+                MoneyParseError.INVALID_FORMAT -> AmountError.INVALID
+                MoneyParseError.NEGATIVE -> AmountError.NEGATIVE
+                MoneyParseError.TOO_MANY_DECIMALS -> AmountError.TOO_MANY_DECIMALS
+                MoneyParseError.OUT_OF_RANGE -> AmountError.TOO_LARGE
+            },
+        )
+    }

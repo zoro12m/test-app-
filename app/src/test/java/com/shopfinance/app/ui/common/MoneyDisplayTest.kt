@@ -2,6 +2,7 @@ package com.shopfinance.app.ui.common
 
 import com.shopfinance.domain.money.Currency
 import com.shopfinance.domain.money.Money
+import com.shopfinance.domain.money.MoneyTotals
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -23,5 +24,15 @@ class MoneyDisplayTest {
         assertEquals(isolated("+12.50 $"), displaySignedMoney(amount, direction = 1))
         assertEquals(isolated("-12.50 $"), displaySignedMoney(amount, direction = -1))
         assertEquals(isolated("12.50 $"), displaySignedMoney(amount, direction = 0))
+    }
+
+    @Test
+    fun totalsShowOneAmountPerCurrency() {
+        val usd = Money(2_500, Currency.USD)
+        val lbp = Money(500_000, Currency.LBP)
+
+        assertEquals("${isolated("25.00 $")} · ${displayMoney(lbp)}", displayTotals(MoneyTotals.of(lbp, usd)))
+        assertEquals(isolated("25.00 $"), displayTotals(MoneyTotals.of(usd)))
+        assertEquals("", displayTotals(MoneyTotals.EMPTY))
     }
 }

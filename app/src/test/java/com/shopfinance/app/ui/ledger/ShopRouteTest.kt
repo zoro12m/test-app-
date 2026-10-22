@@ -43,4 +43,28 @@ class ShopRouteTest {
             ShopRoute.decode("dashboard|settings|entries|new:debt_given:$formId|new:sale:|new:sale"),
         )
     }
+
+    @Test
+    fun theDebtScreensSurviveEncoding() {
+        val stack = listOf(
+            ShopRoute.Dashboard,
+            ShopRoute.Debtors,
+            ShopRoute.Debtor("Xk3_9-aB"),
+            ShopRoute.NewDebt("Xk3_9-aB", formId),
+        )
+        assertEquals(stack, ShopRoute.decode(ShopRoute.encode(stack)))
+
+        for (route in listOf(ShopRoute.NewDebtor(formId), ShopRoute.NewPayment("debt7", formId))) {
+            val withForm = listOf(ShopRoute.Dashboard, ShopRoute.Debtors, route)
+            assertEquals(withForm, ShopRoute.decode(ShopRoute.encode(withForm)))
+        }
+    }
+
+    @Test
+    fun brokenDebtRoutesAreDropped() {
+        assertEquals(
+            listOf(ShopRoute.Dashboard, ShopRoute.Debtors),
+            ShopRoute.decode("dashboard|debtors|debtor:|debtor:a/b|pay:d1|new-debt:r1:$formId:x|new-debtor:"),
+        )
+    }
 }
