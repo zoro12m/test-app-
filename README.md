@@ -31,7 +31,8 @@ Rules are not deployed by CI. After a change to `firestore.rules` is merged, pub
 (Firestore Database > Rules: paste the file, then Publish) or with `firebase deploy --only firestore:rules`.
 Until the rules are published the app cannot read or create shops and shows an "access refused" screen.
 Each stage that adds data adds rules too: after Stage 3 is merged, publish again or the dashboard shows
-"access to the entries was refused".
+"access to the entries was refused", and after the debts feature is merged, publish again or the debts screen
+shows "access to the debts was refused".
 
 ## What the app does so far
 
@@ -42,10 +43,19 @@ Each stage that adds data adds rules too: after Stage 3 is merged, publish again
   reason, and it stays in the list, struck through. Entries are written to the phone first and synced when online;
   unsynced ones are marked.
 
+- Debts: people who owe the shop money and what they repay. The dashboard's Debts button opens the list of
+  people, with the total still owed per currency, a name search and an Open / Paid / All filter, the oldest unpaid
+  debt first. A person's page shows each debt (the day the money was taken, the amount, paid so far, remaining,
+  open or paid) with its payments. A debt is in USD or LBP and can be dated back to 2000; a payment is refused when
+  it is zero, more than the remaining, or dated before the debt. Paid debts stay in the history. Deleting a debt
+  or a payment asks first and only marks it deleted. Debts are a separate book: they never change cash on hand.
+
 Entries are stored under `shops/{shopId}/entries/{entryId}` with the amount in cents (`amountMinor`), and every
-total is computed from the entries. Customer debts, suppliers and due dates come in later stages.
+total is computed from the entries. Debts are stored under `shops/{shopId}/debtors`, `debts` and `debtPayments`,
+again in minor units (cents or lira) with the day as `YYYY-MM-DD` text; what remains on a debt is always computed
+from its payments, never stored. Suppliers and due dates come in later stages.
 
 ## Currency
 
-The app handles USD only: shops and entries are in USD and the rules reject anything else. The domain module
-still supports LBP for a later stage.
+The cash ledger handles USD only: shops and entries are in USD and the rules reject anything else. Debts are in
+USD or LBP. Dollars and lira are never added together: every total is shown once per currency.
