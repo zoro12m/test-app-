@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">دفتر المحل</string>
+    <string name="home_title">دفتر المحل</string>
+    <string name="home_welcome">إدارة النقد والديون والمصاريف لمحلك</string>
+    <string name="home_status">الإصدار الأولي: لا توجد بيانات بعد</string>
+</resources>

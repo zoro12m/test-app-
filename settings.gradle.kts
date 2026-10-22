@@ -28,4 +28,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "shop-finance"
 
+include(":app")
 include(":domain")
