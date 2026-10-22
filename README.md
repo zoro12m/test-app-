@@ -10,6 +10,12 @@ Locally, with JDK 17 and the Android SDK installed: `./gradlew test assembleDebu
 
 Firebase config (`app/google-services.json`) is never committed. CI writes it from the `GOOGLE_SERVICES_JSON` repository secret when that secret exists; without it the app builds without Firebase.
 
+Debug APKs from CI are signed with a shared test key so each new build installs as an update over the last one.
+The key is never committed (the repository is public): CI writes `app/ci-debug.keystore` from the
+`DEBUG_KEYSTORE_BASE64` secret (the keystore file, base64-encoded; alias `androiddebugkey`, passwords `android`).
+Without the secret, every run signs with a new random key, and Android refuses to install that build over an
+earlier one until the old app is uninstalled.
+
 ## Firestore security rules
 
 The rules live in `firestore.rules` and are tested against the Firestore emulator (`firestore-tests/`, run in CI by

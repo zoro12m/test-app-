@@ -24,6 +24,21 @@ android {
         versionName = "0.1.0"
     }
 
+    // Debug builds from CI must all carry the same signature, or Android refuses to install a
+    // new build over the old one. CI writes this keystore from the DEBUG_KEYSTORE_BASE64 secret
+    // (never committed); without it, Gradle signs with the machine's own debug key as usual.
+    val sharedDebugKeystore = file("ci-debug.keystore")
+    signingConfigs {
+        getByName("debug") {
+            if (sharedDebugKeystore.exists()) {
+                storeFile = sharedDebugKeystore
+                storePassword = "android"
+                keyAlias = "androiddebugkey"
+                keyPassword = "android"
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
